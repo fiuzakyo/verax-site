@@ -236,8 +236,8 @@
 
     // Momento 2: cards entram vindo da câmera e saem afastando com o globo
     boxes.forEach((b, i) => {
-      const ein = easeOut(seg(gp, 0.28 + i * 0.045, 0.42 + i * 0.045));
-      const eout = easeIn(seg(gp, 0.55 + i * 0.02, 0.64 + i * 0.02));
+      const ein = easeOut(seg(gp, 0.20 + i * 0.09, 0.29 + i * 0.09));   // 0,20–0,29 · 0,29–0,38 · 0,38–0,47
+      const eout = easeIn(seg(gp, 0.55 + i * 0.03, 0.63 + i * 0.03));   // todos juntos até 0,55; saem em sequência até 0,69
       const [dx, dy] = dirs[i] || [0, 0];
       const far = 1 - ein;
       const scale = (1 + far * 0.4) * (1 - eout * 0.22);
@@ -252,13 +252,13 @@
 
     // Momento 3: frases sobem linha a linha
     gLines.forEach((el, i) => {
-      const e = easeOut(seg(gp, 0.60 + i * 0.02, 0.68 + i * 0.02));
+      const e = easeOut(seg(gp, 0.76 + i * 0.02, 0.84 + i * 0.02));
       el.style.opacity = e.toFixed(3);
       el.style.transform = reduce ? 'none' : `translateY(${((1 - e) * 105).toFixed(1)}%)`;
     });
     // Momento 3: números entram pela direita e contam até o valor
     gNums.forEach((el, i) => {
-      const e = easeOut(seg(gp, 0.61 + i * 0.015, 0.69 + i * 0.015));
+      const e = easeOut(seg(gp, 0.77 + i * 0.02, 0.85 + i * 0.02));
       el.style.opacity = e.toFixed(3);
       el.style.transform = reduce ? 'none' : `translateX(${((1 - e) * 48).toFixed(1)}px)`;
       const sp = el.querySelector('span'), to = +sp.dataset.to, dec = +sp.dataset.dec;
@@ -266,7 +266,7 @@
       if (sp.textContent !== txt) sp.textContent = txt;
     });
 
-    hint.style.opacity = (1 - seg(gp, 0.9, 0.98)).toFixed(3);
+    hint.style.opacity = (1 - seg(gp, 0.93, 0.99)).toFixed(3);
   };
 
   /* ---------- Loop de rolagem ---------- */
