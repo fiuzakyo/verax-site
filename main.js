@@ -206,13 +206,12 @@
   const fmtNum = (v, dec) => v.toLocaleString('pt-BR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
   let gp = 0, lastScan = -1;
   // direção de cada card a partir do centro do globo (para "vir da câmera" e "afastar" junto com a Terra)
+  // vetor de cada card até o centro do planeta (no vídeo o globo fica levemente abaixo do meio da tela)
   let dirs = [];
   const measureDirs = () => {
     const sr = gStage.getBoundingClientRect();
-    dirs = boxes.map(b => {
-      const cx = b.offsetLeft + b.offsetWidth / 2 - sr.width / 2, cy = b.offsetTop + b.offsetHeight / 2 - sr.height / 2;
-      const len = Math.hypot(cx, cy) || 1; return [cx / len, cy / len];
-    });
+    const gx = sr.width * 0.5, gy = sr.height * 0.56;
+    dirs = boxes.map(b => [gx - (b.offsetLeft + b.offsetWidth / 2), gy - (b.offsetTop + b.offsetHeight / 2)]);
   };
   measureDirs(); window.addEventListener('resize', measureDirs);
 
@@ -238,14 +237,14 @@
     boxes.forEach((b, i) => {
       const ein = easeOut(seg(gp, 0.20 + i * 0.09, 0.29 + i * 0.09));   // 0,20–0,29 · 0,29–0,38 · 0,38–0,47
       const eout = easeIn(seg(gp, 0.55 + i * 0.03, 0.63 + i * 0.03));   // todos juntos até 0,55; saem em sequência até 0,69
-      const [dx, dy] = dirs[i] || [0, 0];
-      const far = 1 - ein;
-      const scale = (1 + far * 0.4) * (1 - eout * 0.22);
-      const push = far * 140 - eout * 70;
-      const blur = far * 10 + eout * 6;
-      const op = ein * (1 - eout);
+      const [vx, vy] = dirs[i] || [0, 0];
+      // entra saindo de dentro do planeta (pequeno e desfocado) e volta para ele ao sair
+      const pull = 0.92 * (1 - ein) + 0.75 * eout;          // 1 = no centro do globo, 0 = na posição do Figma
+      const scale = (0.28 + 0.72 * ein) * (1 - 0.6 * eout);
+      const blur = (1 - ein) * 8 + eout * 6;
+      const op = Math.min(1, ein * 1.4) * (1 - eout);
       b.style.opacity = op.toFixed(3);
-      b.style.transform = reduce ? 'none' : `translate(${(dx * push).toFixed(1)}px, ${(dy * push).toFixed(1)}px) scale(${scale.toFixed(3)})`;
+      b.style.transform = reduce ? 'none' : `translate(${(vx * pull).toFixed(1)}px, ${(vy * pull).toFixed(1)}px) scale(${scale.toFixed(3)})`;
       b.style.filter = reduce || blur < 0.2 ? 'none' : `blur(${blur.toFixed(1)}px)`;
       b.style.visibility = op < 0.01 ? 'hidden' : 'visible';
     });
