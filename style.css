@@ -230,10 +230,10 @@ s{text-decoration:none}
 /* =========================================================
    04 · SERVIÇOS
    ========================================================= */
-.services{--p:0;background:var(--color-primary-1000);display:grid;grid-template-columns:calc(704 * var(--u)) 1fr;min-height:calc(820 * var(--u));max-width:var(--max);margin:0 auto;box-shadow:0 0 0 100vmax var(--color-primary-1000);clip-path:inset(0 -100vmax)}
+.services{--p:0;--side:max(0px, calc((100% - var(--max)) / 2));background:var(--color-primary-1000);display:grid;grid-template-columns:calc(var(--side) + 704 * var(--u)) 1fr;min-height:calc(820 * var(--u))}
 .services-media{position:relative;overflow:hidden;min-height:100%}
 .services-media .media{position:absolute;inset:0}
-.services-body{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:56px;padding:calc(80 * var(--u)) var(--g) calc(80 * var(--u)) calc(32 * var(--u))}
+.services-body{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:56px;padding:calc(80 * var(--u)) calc(var(--side) + var(--g)) calc(80 * var(--u)) calc(32 * var(--u))}
 .services-body>div{display:flex;flex-direction:column;gap:25px}
 .services-list{display:flex;flex-direction:column;gap:calc(24 * var(--u))}
 .services-list li{font:800 clamp(26px, calc(52 * var(--u)), 52px)/.983 var(--font-head);letter-spacing:-.044em;text-transform:uppercase;color:rgba(255,255,255,.34);cursor:pointer;transition:color .45s var(--ease-out),transform .45s var(--ease-out)}
